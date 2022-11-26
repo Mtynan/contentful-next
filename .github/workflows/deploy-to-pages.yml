@@ -6,7 +6,7 @@ on:
   
   repository_dispatch:
     types:
-      -webhook
+      [publish-event]
 
 env:
   NODE_AUTH_TOKEN: ${{ secrets.SECRET_KEY }}

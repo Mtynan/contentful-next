@@ -1,11 +1,33 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import { IContentfulTestFields } from "../src/@types/contentful";
+import ContentService from  "../utils/contentful-service";
 
-export default function Home() {
+export async function getStaticProps() {
+  const testData = (
+    await ContentService.instance.getEntriesByType<IContentfulTestFields>(
+      "contentfulTest"
+    )
+  ).map((entry) => entry.fields);
+
+  return {
+    props: {
+      testData,
+    },
+  };
+}
+
+type Props = {
+  testData: IContentfulTestFields[];
+};
+
+export default function Home({ testData }: Props) {
   return (
-    <div className={styles.container}>
-      <h1>test</h1>
-    </div>
-  )
+    <>
+      {testData.map((data,i) => (
+        <div key={i}>
+          <h1>{data.testMessage}</h1>
+          <h1>{data.testNumber}</h1>
+        </div>
+      ))}
+    </>
+  );
 }
